@@ -20,9 +20,6 @@ const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-
-// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
-
 const dbUrl = process.env.ATLASDB_URL;
 
 
@@ -69,10 +66,6 @@ const sessionOptions = {
     },
 };
 
-// app.get("/", (req, res) => {
-//     res.send("Hi,I am root");
-// });
-
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -90,31 +83,14 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.get("/demouser", async(req, res) => {
-//     let fakeUser = new User({
-//         email: "student@gmail.com",
-//         username: "delta-student",
-//     });
-//     let registeredUSer = await User.register(fakeUser, "helloworld");
-//     res.send(registeredUSer);
-// })
-
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
-app.use("/", userRouter);
 
-// app.get("/testListing",async (req,res)=>{
-//     let sampleListing=new Listing({
-//         title:"My New Villa",
-//         description:"By the beach",
-//         price:"12000",
-//         location:"juhu,mumbai",
-//         country:"India",
-//     });
-//     await sampleListing.save();
-//     console.log("sample was saved");
-//     res.send("successful testing");
-// });
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
+
+app.use("/", userRouter);
 
 app.all("*", (req, res, next) => {
     next(new ExpressError(404, "Page Not Found"));
